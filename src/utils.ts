@@ -25,8 +25,11 @@ export function formatDate(dateString: string): string {
   ].join("");
 }
 
-export function buildUrl(event: ICalEvent): string {
-  return [
+export function buildUrl(
+  event: ICalEvent,
+  useDataURL: boolean = false
+): string {
+  const url = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "BEGIN:VEVENT",
@@ -39,6 +42,12 @@ export function buildUrl(event: ICalEvent): string {
     "END:VEVENT",
     "END:VCALENDAR"
   ].join("\n");
+
+  if (useDataURL) {
+    return encodeURI(`data:text/calendar;charset=utf8,${url}`);
+  } else {
+    return url;
+  }
 }
 
 export function downloadBlob(blob: object, filename: string): void {
@@ -56,4 +65,12 @@ export function isCrappyIE(): boolean {
     window.navigator.msSaveOrOpenBlob &&
     window.Blob
   );
+}
+
+export function isMobileSafari(): boolean {
+  const ua = window.navigator.userAgent;
+  const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+  const webkit = !!ua.match(/WebKit/i);
+
+  return iOS && webkit && !ua.match(/CriOS/i);
 }

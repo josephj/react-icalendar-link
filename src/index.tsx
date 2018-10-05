@@ -4,7 +4,7 @@
  */
 
 import * as React from "react";
-import { ICalEvent, buildUrl, downloadBlob } from "./utils";
+import { ICalEvent, buildUrl, downloadBlob, isMobileSafari } from "./utils";
 
 interface Props {
   href: string;
@@ -32,16 +32,24 @@ export default class ICalLink extends React.Component<Props> {
     e.preventDefault();
 
     const { event, filename } = this.props;
-    const url: string = buildUrl(event);
+    const url: string = buildUrl(event, isMobileSafari());
     const blob: object = new Blob([url], {
       type: "text/calendar;charset=utf-8"
     });
 
+    // IE
     if (this.isCrappyIE) {
       window.navigator.msSaveOrOpenBlob(blob, filename);
       return;
     }
 
+    // Safari
+    if (isMobileSafari()) {
+      window.open(url, "_blank");
+      return;
+    }
+
+    // Desktop
     downloadBlob(blob, filename);
   };
   render() {
