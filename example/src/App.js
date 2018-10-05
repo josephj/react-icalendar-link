@@ -16,6 +16,7 @@ export default class App extends Component {
 
     return (
       <div>
+        <div>Supported = {ICalLink.isSupported.toString()}</div>
         <ICalLink event={event} style={style}>
           Today is a huge day!
         </ICalLink>

@@ -4,17 +4,25 @@
  */
 
 import * as React from "react";
-import { ICalEvent, buildUrl, downloadBlob, isMobileSafari } from "./utils";
+import {
+  ICalEvent,
+  buildUrl,
+  downloadBlob,
+  isIOSSafari,
+  isIOSChrome
+} from "./utils";
 
 interface Props {
   href: string;
   event: ICalEvent;
   filename: string;
   isCrappyIE: boolean;
+  isSupported: boolean;
 }
 
 export default class ICalLink extends React.Component<Props> {
   isCrappyIE: boolean;
+  public static isSupported: boolean = !isIOSChrome();
   public static defaultProps: Partial<Props> = {
     filename: "download.ics",
     href: "#add-to-calendar"
@@ -32,7 +40,7 @@ export default class ICalLink extends React.Component<Props> {
     e.preventDefault();
 
     const { event, filename } = this.props;
-    const url: string = buildUrl(event, isMobileSafari());
+    const url: string = buildUrl(event, isIOSSafari());
     const blob: object = new Blob([url], {
       type: "text/calendar;charset=utf-8"
     });
@@ -44,7 +52,7 @@ export default class ICalLink extends React.Component<Props> {
     }
 
     // Safari
-    if (isMobileSafari()) {
+    if (isIOSSafari()) {
       window.open(url, "_blank");
       return;
     }

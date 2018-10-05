@@ -67,10 +67,17 @@ export function isCrappyIE(): boolean {
   );
 }
 
-export function isMobileSafari(): boolean {
+export function isIOSSafari(): boolean {
   const ua = window.navigator.userAgent;
   const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
   const webkit = !!ua.match(/WebKit/i);
 
   return iOS && webkit && !ua.match(/CriOS/i);
+}
+
+export function isIOSChrome(): boolean {
+  const ua = window.navigator.userAgent;
+  const iOS = !!ua.match(/iPad/i) || !!ua.match(/iPhone/i);
+
+  return iOS && !!ua.match(/CriOS/i);
 }
