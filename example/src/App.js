@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import ICalLink from "react-ical-link";
+import ICalLink from "react-icalendar-link";
 
 export default class App extends Component {
   render() {

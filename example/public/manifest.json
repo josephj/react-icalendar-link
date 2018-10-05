@@ -1,6 +1,6 @@
 {
-  "short_name": "react-ical-link",
-  "name": "react-ical-link",
+  "short_name": "react-icalendar-link",
+  "name": "react-icalendar-link",
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

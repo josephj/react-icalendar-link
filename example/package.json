@@ -1,6 +1,6 @@
 {
-  "name": "react-ical-link-example",
-  "homepage": "https://josephj.github.io/react-ical-link",
+  "name": "react-icalendar-link-example",
+  "homepage": "https://josephj.github.io/react-icalendar-link",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -8,7 +8,7 @@
     "prop-types": "^15.6.2",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-ical-link": "file:..",
+    "react-icalendar-link": "file:..",
     "react-scripts": "^1.1.4"
   },
   "scripts": {
