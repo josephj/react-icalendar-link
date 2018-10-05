@@ -1,6 +1,5 @@
 /**
  * @class ICalLink
- * https://bugs.chromium.org/p/chromium/issues/detail?id=666211
  */
 
 import * as React from "react";
@@ -22,6 +21,8 @@ interface Props {
 
 export default class ICalLink extends React.Component<Props> {
   isCrappyIE: boolean;
+  // FIXME - iOS Chrome doesn't support adding to iCal at the moment.
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=666211
   public static isSupported: boolean = !isIOSChrome();
   public static defaultProps: Partial<Props> = {
     filename: "download.ics",
