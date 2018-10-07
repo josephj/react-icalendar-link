@@ -39,6 +39,7 @@ export default class ICalLink extends React.Component<Props> {
   }
   handleClick = (e: React.MouseEvent<HTMLAnchorElement>): void => {
     e.preventDefault();
+    e.stopPropagation();
 
     const { event, filename } = this.props;
     const url: string = buildUrl(event, isIOSSafari());
