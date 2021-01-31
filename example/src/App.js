@@ -11,12 +11,12 @@ export default class App extends Component {
         ">>> DESCRIPTION <<<\\n Today is a huge day. \\n Tomorrow will be a huge day too!\\n",
       startTime: "2018-10-07T10:30:00+10:00",
       endTime: "2018-10-07T12:00:00+10:00",
-      location: "4/7 Herbert St, St Leonards, NSW 2065"
+      location: "4/7 Herbert St, St Leonards, NSW 2065",
     };
 
     return (
       <div>
-        <div>Supported = {ICalLink.isSupported.toString()}</div>
+        <div>Supported = {ICalLink.isSupported().toString()}</div>
         <ICalLink event={event} style={style}>
           Today is a huge day!
         </ICalLink>

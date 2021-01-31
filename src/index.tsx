@@ -16,14 +16,14 @@ interface Props {
   event: ICalEvent;
   filename: string;
   isCrappyIE: boolean;
-  isSupported: boolean;
+  isSupported: () => boolean;
 }
 
 export default class ICalLink extends React.Component<Props> {
   isCrappyIE: boolean;
   // FIXME - iOS Chrome doesn't support adding to iCal at the moment.
   // https://bugs.chromium.org/p/chromium/issues/detail?id=666211
-  public static isSupported: boolean = !isIOSChrome();
+  public static isSupported = () => !isIOSChrome();
   public static defaultProps: Partial<Props> = {
     filename: "download.ics",
     href: "#add-to-calendar"
