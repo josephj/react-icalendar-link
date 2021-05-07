@@ -1,9 +1,10 @@
 export interface ICalEvent {
   title: string;
-  description: string;
   startTime: string;
-  endTime: string;
-  location: string;
+  description?: string;
+  endTime?: string;
+  location?: string;
+  url?: string;
 }
 
 function pad(num: number): string {
@@ -27,18 +28,24 @@ export function formatDate(dateString: string): string {
 
 export function buildUrl(
   event: ICalEvent,
-  useDataURL: boolean = false
+  useDataURL: boolean = false,
+  rawContent: string = ""
 ): string {
+  const body: string[] = [];
+
+  body.push(`URL:${event.url || document.URL}`);
+  body.push(`DTSTART:${formatDate(event.startTime)}`);
+  body.push(`SUMMARY:${event.title}`);
+  event.endTime && body.push(`DTEND:${formatDate(event.endTime)}`);
+  event.description && body.push(`DESCRIPTION:${event.description}`);
+  event.location && body.push(`LOCATION:${event.location}`);
+  rawContent && body.push(rawContent);
+
   const url = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
     "BEGIN:VEVENT",
-    "URL:" + document.URL,
-    "DTSTART:" + formatDate(event.startTime),
-    "DTEND:" + formatDate(event.endTime),
-    "SUMMARY:" + event.title,
-    "DESCRIPTION:" + event.description,
-    "LOCATION:" + event.location,
+    body.join("\n"),
     "END:VEVENT",
     "END:VCALENDAR"
   ].join("\n");
