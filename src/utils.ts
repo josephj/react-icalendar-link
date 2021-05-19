@@ -4,6 +4,7 @@ export interface ICalEvent {
   description?: string;
   endTime?: string;
   location?: string;
+  attendees?: string[];
   url?: string;
 }
 
@@ -36,6 +37,16 @@ export function buildUrl(
   body.push(`URL:${event.url || document.URL}`);
   body.push(`DTSTART:${formatDate(event.startTime)}`);
   body.push(`SUMMARY:${event.title}`);
+  if (event.attendees) {
+    event.attendees.map(attendee => {
+      const regExp = attendee.match(/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/);
+      const name = regExp && regExp[1];
+      const email = regExp && regExp[2];
+      return { name, email };
+    }).forEach(({ name, email }) => {
+      body.push(`ATTENDEE;CN=${name};CUTYPE=INDIVIDUAL;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIPANT;RSVP=TRUE:mailto:${email}`);
+    });
+  };
   event.endTime && body.push(`DTEND:${formatDate(event.endTime)}`);
   event.description && body.push(`DESCRIPTION:${event.description}`);
   event.location && body.push(`LOCATION:${event.location}`);
