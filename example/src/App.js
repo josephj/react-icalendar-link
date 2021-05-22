@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import ICalLink from "react-icalendar-link";
 
 export default class App extends Component {
-  render () {
+  render() {
     const style = { fontSize: "12px", padding: "5px" };
     const event = {
       title: "--- TITLE ---",
@@ -13,8 +13,8 @@ export default class App extends Component {
       endTime: "2021-05-09T12:00:00+10:00",
       location: "10 Carlotta St Artarmon NSW 2064",
       attendees: [
-        "Joseph Chiang <josephj6802@gmail.com>",
-        "TC Wang <tingchun0113@gmail.com>"
+        "Hello World<hello@world.com>",
+        "Hey <hey@test.com>"
       ],
     };
     const rawContent = `ATTENDEE;CN="Cyrus Daboo";CUTYPE=INDIVIDUAL;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
