@@ -34,25 +34,32 @@ export function buildUrl(
 ): string {
   const body: string[] = [];
 
-  body.push(`URL:${event.url || document.URL}`);
+  if (!event || !event.startTime || !event.title)
+    throw Error("Both startTime and title fields are mandatory");
+
   body.push(`DTSTART:${formatDate(event.startTime)}`);
   body.push(`SUMMARY:${event.title}`);
-  event.attendees && event.attendees.forEach(attendee => {
-    const regExp = /^([^<]+)\s*<(.+)>/;
-    const matches = attendee.match(regExp);
-    if (matches) {
-      const name = matches[1];
-      const email = matches[2];
-      body.push([
-        'ATTENDEE',
-        `CN=${name}`,
-        'CUTYPE=INDIVIDUAL',
-        'PARTSTAT=NEEDS-ACTION',
-        'ROLE=REQ-PARTICIPANT',
-        `RSVP=TRUE:mailto:${email}`
-      ].join(';'));
-    };
-  });
+
+  event.url && body.push(`URL:${event.url}`);
+  event.attendees &&
+    event.attendees.forEach(attendee => {
+      const regExp = /^([^<]+)\s*<(.+)>/;
+      const matches = attendee.match(regExp);
+      if (matches) {
+        const name = matches[1];
+        const email = matches[2];
+        body.push(
+          [
+            "ATTENDEE",
+            `CN=${name}`,
+            "CUTYPE=INDIVIDUAL",
+            "PARTSTAT=NEEDS-ACTION",
+            "ROLE=REQ-PARTICIPANT",
+            `RSVP=TRUE:mailto:${email}`
+          ].join(";")
+        );
+      }
+    });
   event.endTime && body.push(`DTEND:${formatDate(event.endTime)}`);
   event.description && body.push(`DESCRIPTION:${event.description}`);
   event.location && body.push(`LOCATION:${event.location}`);
