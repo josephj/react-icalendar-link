@@ -30,5 +30,41 @@ describe("utils", () => {
         ].join("\n")
       );
     });
+    it("should include attendees in the iCalendar when the info is provided", () => {
+      const title = "Something great";
+      const startTime = "2018-10-07T10:30:00+10:00";
+      const attendees = [
+        "Hello World<hello@world.com>",
+        "Hey <hey@test.com>"
+      ];
+      const result = buildUrl({title, startTime, attendees});
+      expect(result).toBe(
+        [
+          "BEGIN:VCALENDAR",
+          "VERSION:2.0",
+          "BEGIN:VEVENT",
+          `DTSTART:${formatDate(startTime)}`,
+          `SUMMARY:${title}`,
+          [
+            "ATTENDEE",
+            "CN=Hello World",
+            "CUTYPE=INDIVIDUAL",
+            "PARTSTAT=NEEDS-ACTION",
+            "ROLE=REQ-PARTICIPANT",
+            "RSVP=TRUE:mailto:hello@world.com"
+          ].join(";"),
+          [
+            "ATTENDEE",
+            "CN=Hey ",
+            "CUTYPE=INDIVIDUAL",
+            "PARTSTAT=NEEDS-ACTION",
+            "ROLE=REQ-PARTICIPANT",
+            "RSVP=TRUE:mailto:hey@test.com"
+          ].join(";"),
+          "END:VEVENT",
+          "END:VCALENDAR"
+        ].join("\n")
+      );
+    });
   });
 });
