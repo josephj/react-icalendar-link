@@ -12,6 +12,7 @@ import {
 } from "./utils";
 
 interface Props {
+  className: string;
   href: string;
   event: ICalEvent;
   filename: string;
@@ -45,7 +46,7 @@ export default class ICalLink extends React.Component<Props> {
 
     const { event, filename, rawContent } = this.props;
     const url: string = buildUrl(event, isIOSSafari(), rawContent);
-    const blob: object = new Blob([url], {
+    const blob: Blob = new Blob([url], {
       type: "text/calendar;charset=utf-8"
     });
 
@@ -65,10 +66,10 @@ export default class ICalLink extends React.Component<Props> {
     downloadBlob(blob, filename);
   };
   render() {
-    const { children, ...otherProps } = this.props;
+    const { children, href, className } = this.props;
 
     return (
-      <a onClick={this.handleClick} {...otherProps}>
+      <a onClick={this.handleClick} {...{ href, className }}>
         {children}
       </a>
     );
