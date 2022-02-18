@@ -32,10 +32,18 @@ class App extends React.Component {
     return (
       <ICalendarLink event={event}>
         Add to Calendar
-      </ICalendarLink>;
+      </ICalendarLink>
     );
   }
 }
+```
+
+### Using a Different File Name
+
+By default, the file name that a user downloads is `download.ics`. You can specify a different file name using the `filename` prop.
+
+```jsx
+<ICalLink filename="blahblah.ics" {...{ event }} />
 ```
 
 ### Using Raw Content
@@ -52,7 +60,7 @@ class App extends React.Component {
       title: "My Title",
       description: "My Description",
       startTime: "2018-10-07T10:30:00+10:00",
-      location: "10 Carlotta St, Artarmon NSW 2064, Australia";
+      location: "10 Carlotta St, Artarmon NSW 2064, Australia",
     }
     const rawContent = `ATTENDEE;CN="Cyrus Daboo";CUTYPE=INDIVIDUAL;PARTSTAT=ACCEPTED:mailto:cyrus@example.com
 ATTENDEE;CN="Wilfredo Sanchez Vega";CUTYPE=INDIVIDUAL;PARTSTAT=NEEDS-ACTION;ROLE=REQ-PARTICIPANT;RSVP=TRUE:mailto:wilfredo@example.com
@@ -62,7 +70,7 @@ ATTENDEE;CN="Mike Douglass";CUTYPE=INDIVIDUAL;PARTSTAT=NEEDS-ACTION;RSVP=TRUE:ma
     return (
       <ICalendarLink event={event} rawContent={rawContent}>
         Add to Calendar
-      </ICalendarLink>;
+      </ICalendarLink>
     );
   }
 }
