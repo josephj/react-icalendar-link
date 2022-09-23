@@ -19,6 +19,7 @@ interface Props {
   rawContent: string;
   isCrappyIE: boolean;
   isSupported: () => boolean;
+  children: React.ReactNode;
 }
 
 export default class ICalLink extends React.Component<Props> {
