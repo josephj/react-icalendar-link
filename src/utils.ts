@@ -28,49 +28,58 @@ export function formatDate(dateString: string): string {
 }
 
 export function buildUrl(
-  event: ICalEvent,
+  event: ICalEvent|ICalEvent[],
   useDataURL: boolean = false,
-  rawContent: string = ""
+  rawContent: string[]|string = ""
 ): string {
   const body: string[] = [];
+  const parsedEvents = Array.isArray(event) ? event : [event];
+  
+  parsedEvents.forEach((innerEvent, i) => {
+    if (!innerEvent || !innerEvent.startTime || !innerEvent.title)
+      throw Error("Both startTime and title fields are mandatory");
+    
+      body.push("BEGIN:VEVENT");
+      body.push(`DTSTART:${formatDate(innerEvent.startTime)}`);
+      body.push(`SUMMARY:${innerEvent.title}`);
 
-  if (!event || !event.startTime || !event.title)
-    throw Error("Both startTime and title fields are mandatory");
-
-  body.push(`DTSTART:${formatDate(event.startTime)}`);
-  body.push(`SUMMARY:${event.title}`);
-
-  event.url && body.push(`URL:${event.url}`);
-  event.attendees &&
-    event.attendees.forEach(attendee => {
-      const regExp = /^([^<]+)\s*<(.+)>/;
-      const matches = attendee.match(regExp);
-      if (matches) {
-        const name = matches[1];
-        const email = matches[2];
-        body.push(
-          [
-            "ATTENDEE",
-            `CN=${name}`,
-            "CUTYPE=INDIVIDUAL",
-            "PARTSTAT=NEEDS-ACTION",
-            "ROLE=REQ-PARTICIPANT",
-            `RSVP=TRUE:mailto:${email}`
-          ].join(";")
-        );
+      innerEvent.url && body.push(`URL:${innerEvent.url}`);
+      innerEvent.attendees &&
+        innerEvent.attendees.forEach(attendee => {
+          const regExp = /^([^<]+)\s*<(.+)>/;
+          const matches = attendee.match(regExp);
+          if (matches) {
+            const name = matches[1];
+            const email = matches[2];
+            body.push(
+              [
+                "ATTENDEE",
+                `CN=${name}`,
+                "CUTYPE=INDIVIDUAL",
+                "PARTSTAT=NEEDS-ACTION",
+                "ROLE=REQ-PARTICIPANT",
+                `RSVP=TRUE:mailto:${email}`
+              ].join(";")
+            );
+          }
+        });
+      innerEvent.endTime && body.push(`DTEND:${formatDate(innerEvent.endTime)}`);
+      innerEvent.description && body.push(`DESCRIPTION:${innerEvent.description}`);
+      innerEvent.location && body.push(`LOCATION:${innerEvent.location}`);
+      
+      if(Array.isArray(rawContent)) {
+        typeof rawContent[i] !== 'undefined' && rawContent[i] && body.push(rawContent[i]);
+      } else {
+        rawContent && i === 0 && body.push(rawContent);
       }
-    });
-  event.endTime && body.push(`DTEND:${formatDate(event.endTime)}`);
-  event.description && body.push(`DESCRIPTION:${event.description}`);
-  event.location && body.push(`LOCATION:${event.location}`);
-  rawContent && body.push(rawContent);
+    
+      body.push("END:VEVENT");
+  });
 
   const url = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "BEGIN:VEVENT",
     body.join("\n"),
-    "END:VEVENT",
     "END:VCALENDAR"
   ].join("\n");
 
